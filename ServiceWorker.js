@@ -1,9 +1,9 @@
 const cacheName = "Re.Games-Ricochet-1.0";
 const contentToCache = [
     "Build/Ricochet.loader.js",
-    "Build/Ricochet.framework.js.gz",
-    "Build/Ricochet.data.gz",
-    "Build/Ricochet.wasm.gz",
+    "Build/Ricochet.framework.js",
+    "Build/Ricochet.data",
+    "Build/Ricochet.wasm",
     "TemplateData/style.css"
 
 ];
