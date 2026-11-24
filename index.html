@@ -72,6 +72,7 @@
         const progressBarFull = document.querySelector("#unity-progress-bar-full");
         const spinner = document.querySelector('.spinner');
         const fullscreenButton = document.querySelector('#fullscreen-button');
+        const fullscreenTarget = document.documentElement;
 
         const canFullscreen = (function () {
             for (const key of [
@@ -80,7 +81,7 @@
                 'mozRequestFullScreen',
                 'msRequestFullscreen',
             ]) {
-                if (key in container) {
+                if (key in fullscreenTarget) {
                     return true;
                 }
             }
@@ -104,17 +105,17 @@
                         document.msExitFullscreen;
                     await exitFullscreen.call(document);
                 }
-                else if (container.requestFullscreen) {
-                    await container.requestFullscreen({ navigationUI: 'hide' });
+                else if (fullscreenTarget.requestFullscreen) {
+                    await fullscreenTarget.requestFullscreen({ navigationUI: 'hide' });
                 }
-                else if (container.webkitRequestFullscreen) {
-                    container.webkitRequestFullscreen();
+                else if (fullscreenTarget.webkitRequestFullscreen) {
+                    fullscreenTarget.webkitRequestFullscreen();
                 }
-                else if (container.mozRequestFullScreen) {
-                    container.mozRequestFullScreen();
+                else if (fullscreenTarget.mozRequestFullScreen) {
+                    fullscreenTarget.mozRequestFullScreen();
                 }
-                else if (container.msRequestFullscreen) {
-                    container.msRequestFullscreen();
+                else if (fullscreenTarget.msRequestFullscreen) {
+                    fullscreenTarget.msRequestFullscreen();
                 }
             }
             catch (error) {

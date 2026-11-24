@@ -18,7 +18,13 @@ canvas {
 body {
     margin: 0;
     overflow: hidden;
-    background: radial-gradient(circle at center, #254b5c 0%, #102833 58%, #07171f 100%);
+    background: #000000;
+}
+
+html:fullscreen,
+html:-webkit-full-screen,
+html:-moz-full-screen {
+    background: #000000;
 }
 
 #unity-container {
