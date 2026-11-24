@@ -46,13 +46,11 @@
                 <div class="spinner"></div>
             </div>
         </div>
-        <button id="fullscreen-button" type="button" aria-label="На весь экран" title="На весь экран">&#x26F6;</button>
     </div>
 
     <!-- Additional body modules -->
 
     <script>
-        const hideFullScreenButton = "";
         const buildUrl = "Build";
         const loaderUrl = buildUrl + "/Ricochet.loader.js";
         const config = {
@@ -71,76 +69,6 @@
         const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
         const progressBarFull = document.querySelector("#unity-progress-bar-full");
         const spinner = document.querySelector('.spinner');
-        const fullscreenButton = document.querySelector('#fullscreen-button');
-        const fullscreenTarget = document.documentElement;
-
-        const canFullscreen = (function () {
-            for (const key of [
-                'requestFullscreen',
-                'webkitRequestFullscreen',
-                'mozRequestFullScreen',
-                'msRequestFullscreen',
-            ]) {
-                if (key in fullscreenTarget) {
-                    return true;
-                }
-            }
-            return false;
-        }());
-
-        function GetFullscreenElement() {
-            return document.fullscreenElement ||
-                document.webkitFullscreenElement ||
-                document.mozFullScreenElement ||
-                document.msFullscreenElement;
-        }
-
-        async function ToggleFullscreen() {
-            try {
-                if (GetFullscreenElement()) {
-                    const exitFullscreen = document.exitFullscreen ||
-                        document.webkitExitFullscreen ||
-                        document.webkitCancelFullScreen ||
-                        document.mozCancelFullScreen ||
-                        document.msExitFullscreen;
-                    await exitFullscreen.call(document);
-                }
-                else if (fullscreenTarget.requestFullscreen) {
-                    await fullscreenTarget.requestFullscreen({ navigationUI: 'hide' });
-                }
-                else if (fullscreenTarget.webkitRequestFullscreen) {
-                    fullscreenTarget.webkitRequestFullscreen();
-                }
-                else if (fullscreenTarget.mozRequestFullScreen) {
-                    fullscreenTarget.mozRequestFullScreen();
-                }
-                else if (fullscreenTarget.msRequestFullscreen) {
-                    fullscreenTarget.msRequestFullscreen();
-                }
-            }
-            catch (error) {
-                console.warn('Fullscreen is not available:', error);
-            }
-        }
-
-        function UpdateFullscreenButton() {
-            const isFullscreen = Boolean(GetFullscreenElement());
-            fullscreenButton.classList.toggle('is-fullscreen', isFullscreen);
-            fullscreenButton.setAttribute('aria-label', isFullscreen ? 'Выйти из полноэкранного режима' : 'На весь экран');
-            fullscreenButton.title = isFullscreen ? 'Выйти из полноэкранного режима' : 'На весь экран';
-        }
-
-        fullscreenButton.style.display = canFullscreen && hideFullScreenButton !== 'true' ? '' : 'none';
-        fullscreenButton.addEventListener('click', event => {
-            event.preventDefault();
-            event.stopPropagation();
-            ToggleFullscreen();
-        });
-        document.addEventListener('fullscreenchange', UpdateFullscreenButton);
-        document.addEventListener('webkitfullscreenchange', UpdateFullscreenButton);
-        document.addEventListener('mozfullscreenchange', UpdateFullscreenButton);
-        document.addEventListener('MSFullscreenChange', UpdateFullscreenButton);
-
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
             container.className = "unity-mobile";
             //config.devicePixelRatio = 1;
