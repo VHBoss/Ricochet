@@ -34,6 +34,13 @@ body {
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.55);
 }
 
+@supports (height: 100dvh) {
+    #unity-container {
+        width: min(100vw, calc(100dvh * 9 / 16));
+        height: min(100dvh, calc(100vw * 16 / 9));
+    }
+}
+
 #unity-canvas {
     width: 100%;
     height: 100%;
@@ -49,6 +56,39 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 10;
+}
+
+#fullscreen-button {
+    position: absolute;
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+    z-index: 30;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border: 2px solid rgba(255, 255, 255, 0.72);
+    border-radius: 12px;
+    color: #ffffff;
+    background: rgba(8, 28, 36, 0.66);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.38);
+    font: 30px/42px Arial, sans-serif;
+    text-align: center;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+#fullscreen-button:hover {
+    background: rgba(18, 58, 70, 0.82);
+}
+
+#fullscreen-button:active {
+    transform: scale(0.92);
+}
+
+#fullscreen-button.is-fullscreen {
+    background: rgba(102, 47, 19, 0.76);
 }
 
 #unity-loading-bar {
