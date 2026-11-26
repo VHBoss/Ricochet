@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#000000">
     <link rel="stylesheet" href="./style.css">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body class="dark">
     <main id="app-viewport">
@@ -43,12 +42,13 @@
         const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
         const progressBarFull = document.querySelector("#unity-progress-bar-full");
         const spinner = document.querySelector(".spinner");
-        const telegram = window.Telegram && window.Telegram.WebApp
+        let telegram = window.Telegram && window.Telegram.WebApp
             ? window.Telegram.WebApp
             : null;
 
         let unityInstance = null;
         let unityLoopPaused = false;
+        let telegramInitialized = false;
 
         function setCssPixels(name, value) {
             root.style.setProperty(name, Math.max(0, Number(value) || 0) + "px");
@@ -88,10 +88,16 @@
         }
 
         function initializeTelegram() {
-            if (!telegram) {
+            telegram = window.Telegram && window.Telegram.WebApp
+                ? window.Telegram.WebApp
+                : null;
+
+            if (!telegram || telegramInitialized) {
                 updateViewport();
                 return;
             }
+
+            telegramInitialized = true;
 
             telegram.ready();
             telegram.expand();
@@ -115,6 +121,15 @@
             updateViewport();
         }
 
+        function loadTelegramSdk() {
+            const script = document.createElement("script");
+            script.src = "https://telegram.org/js/telegram-web-app.js";
+            script.async = true;
+            script.onload = initializeTelegram;
+            script.onerror = updateViewport;
+            document.head.appendChild(script);
+        }
+
         document.addEventListener("contextmenu", event => event.preventDefault());
         document.addEventListener("visibilitychange", () => setActive(!document.hidden));
         window.addEventListener("resize", updateViewport);
@@ -122,7 +137,8 @@
         window.addEventListener("blur", () => setActive(false));
         window.addEventListener("pointerdown", () => canvas.focus(), { passive: true });
 
-        initializeTelegram();
+        updateViewport();
+        loadTelegramSdk();
 
         const loader = document.createElement("script");
         loader.src = loaderUrl;
