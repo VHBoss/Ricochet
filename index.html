@@ -49,6 +49,8 @@
         let unityInstance = null;
         let unityLoopPaused = false;
         let telegramInitialized = false;
+        let unityReady = false;
+        let localizationReady = false;
 
         function setCssPixels(name, value) {
             root.style.setProperty(name, Math.max(0, Number(value) || 0) + "px");
@@ -86,6 +88,19 @@
             if (active)
                 canvas.focus();
         }
+
+        function finishLoading() {
+            if (!unityReady || !localizationReady)
+                return;
+
+            loadingCover.hidden = true;
+            setActive(!document.hidden && (!telegram || telegram.isActive !== false));
+        }
+
+        window.ricochetLocalizationReady = () => {
+            localizationReady = true;
+            finishLoading();
+        };
 
         function initializeTelegram() {
             telegram = window.Telegram && window.Telegram.WebApp
@@ -149,8 +164,8 @@
                 progressBarFull.style.width = `${100 * Math.max(progress, 0.05)}%`;
             }).then(instance => {
                 unityInstance = instance;
-                loadingCover.hidden = true;
-                setActive(!document.hidden && (!telegram || telegram.isActive !== false));
+                unityReady = true;
+                finishLoading();
             }).catch(error => {
                 console.error(error);
             });
